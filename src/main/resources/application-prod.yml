@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://prod-db-host:5432/employee_db
+    username: prod_db_user
+    password: ${DB_PASSWORD}
+
+server:
+  port: 8080

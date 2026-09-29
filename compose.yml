@@ -1,0 +1,50 @@
+services:
+
+  postgres:
+    image: postgres:18
+    container_name: employee-postgres
+
+    ports:
+      - "5433:5432"
+
+    environment:
+      POSTGRES_DB: employee_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    volumes:
+      - postgres-data:/var/lib/postgresql
+
+    networks:
+      - employee-network
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d employee_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    container_name: employee-backend
+
+    ports:
+      - "8084:8080"
+
+    env_file:
+      - .env
+
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+    depends_on:
+      - postgres
+
+    networks:
+      - employee-network
+
+volumes:
+  postgres-data:
+
+networks:
+  employee-network:

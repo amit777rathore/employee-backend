@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://uat-db-host:5432/employee_db
+    username: uat_db_user
+    password: ${DB_PASSWORD}
+
+server:
+  port: 8080

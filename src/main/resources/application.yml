@@ -1,0 +1,71 @@
+spring:
+
+  application:
+    name: employee-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/employee_db
+    username: postgres
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  company-name: Employee Management System
+  version: 1.0
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{requestId}] [traceId=%X{traceId}, spanId=%X{spanId}] %-5level %logger{36} - %msg%n"
+  level:
+    root: INFO
+    com.firstproject.employeebackend: INFO
+  file:
+    name: logs/employee-backend.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+      total-size-cap: 100MB
+
+weather:
+  api:
+    base-url: https://api.weatherapi.com
+    key: ${WEATHER_API_KEY}
+
+resilience4j:
+  retry:
+    retryAspectOrder: 2
+    instances:
+      weatherApi:
+        max-attempts: 3
+        wait-duration: 2s
+        retry-exceptions:
+          - java.lang.RuntimeException
+
+  circuitbreaker:
+    circuitBreakerAspectOrder: 1
+    instances:
+      weatherApi:
+        sliding-window-size: 2
+        minimum-number-of-calls: 4
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 20s
+        permitted-number-of-calls-in-half-open-state: 2
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+
