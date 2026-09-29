@@ -53,4 +53,5 @@ jobs:
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           WEATHER_API_KEY: ci-test-key
+          MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED: "false"
         run: ./mvnw clean verify
