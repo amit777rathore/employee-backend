@@ -52,4 +52,5 @@ jobs:
       - name: Build and test
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          WEATHER_API_KEY: ci-test-key
         run: ./mvnw clean verify
