@@ -12,9 +12,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
     services:
       postgres:
         image: postgres:18
@@ -42,4 +39,6 @@ jobs:
           cache: maven
 
       - name: Build and test
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: ./mvnw clean verify
